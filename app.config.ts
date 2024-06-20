@@ -14,6 +14,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		resizeMode: 'contain',
 		backgroundColor: '#ffffff',
 	},
+	updates: {
+		checkAutomatically: 'ON_LOAD',
+		url: 'https://u.expo.dev/ae83f124-692c-48cd-9876-2c3575a598b9',
+	},
+	runtimeVersion: {
+		policy: 'appVersion',
+	},
 	ios: {
 		supportsTablet: true,
 	},
