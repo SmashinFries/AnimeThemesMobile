@@ -2,12 +2,12 @@ import { ExpoConfig, ConfigContext } from 'expo/config';
 const IS_DEV = process.env.APP_VARIANT === 'development';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
-	name: IS_DEV ? 'ATM Dev' : 'AnimeThemesMobile',
+	name: IS_DEV ? 'ATM Dev' : 'ATM',
 	slug: 'AnimeThemesMobile',
 	version: '1.0.0',
 	orientation: 'portrait',
 	icon: './assets/images/icon.png',
-	scheme: IS_DEV ? 'atmdev' : 'animethemesmobile',
+	scheme: IS_DEV ? 'atmdev' : 'atm',
 	userInterfaceStyle: 'automatic',
 	splash: {
 		image: './assets/images/splash.png',
@@ -30,6 +30,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			foregroundImage: './assets/images/adaptive-icon.png',
 			backgroundColor: '#ffffff',
 		},
+		// can never get deep links to work :(
+		intentFilters: [
+			{
+				action: 'View',
+				data: [
+					{
+						scheme: 'https',
+						host: 'animethemes.moe',
+						pathPrefix: '/anime',
+					},
+				],
+				category: ['BROWSABLE', 'DEFAULT'],
+			},
+		],
 	},
 	web: {
 		bundler: 'metro',
