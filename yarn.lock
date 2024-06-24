@@ -1259,6 +1259,21 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
+"@gorhom/bottom-sheet@^4":
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/@gorhom/bottom-sheet/-/bottom-sheet-4.6.3.tgz#0e16999de7468efc6b730f680692f6d53f0abd8e"
+  integrity sha512-fSuSfbtoKsjmSeyz+tG2C0GtcEL7PS63iEXI23c9M+HeCT1IFK6ffmIa2pqyqB43L1jtkR+BWkpZwqXnN4H8xA==
+  dependencies:
+    "@gorhom/portal" "1.0.14"
+    invariant "^2.2.4"
+
+"@gorhom/portal@1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@gorhom/portal/-/portal-1.0.14.tgz#1953edb76aaba80fb24021dc774550194a18e111"
+  integrity sha512-MXyL4xvCjmgaORr/rtryDNFy3kU4qUbKlwtQqqsygd0xX3mhKjOLn6mQK8wfu0RkoE0pBE0nAasRoHua+/QZ7A==
+  dependencies:
+    nanoid "^3.3.1"
+
 "@graphql-typed-document-node/core@^3.1.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
@@ -2182,6 +2197,25 @@
   integrity sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==
   dependencies:
     "@babel/types" "^7.20.7"
+
+"@types/color-convert@*":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/color-convert/-/color-convert-2.0.3.tgz#e93f5c991eda87a945058b47044f5f0008b0dce9"
+  integrity sha512-2Q6wzrNiuEvYxVQqhh7sXM2mhIhvZR/Paq4FdsQkOMgWsCIkKvSGj8Le1/XalulrmgOzPMqNa0ix+ePY4hTrfg==
+  dependencies:
+    "@types/color-name" "*"
+
+"@types/color-name@*":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.4.tgz#e002611ff627347818d440a05e81650e9a4053b8"
+  integrity sha512-hulKeREDdLFesGQjl96+4aoJSHY5b2GRjagzzcqCfIrWhe5vkCqIvrLbqzBaI1q94Vg8DNJZZqTR5ocdWmWclg==
+
+"@types/color@^3.0.0":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@types/color/-/color-3.0.6.tgz#29c27a99d4de2975e1676712679a0bd7f646a3fb"
+  integrity sha512-NMiNcZFRUAiUUCCf7zkAelY8eV3aKqfbzyFQlXpPIEeoNDbsEHGpb854V3gzTsGKYj830I5zPuOwU/TP5/cW6A==
+  dependencies:
+    "@types/color-convert" "*"
 
 "@types/cookie@^0.6.0":
   version "0.6.0"
@@ -4626,10 +4660,10 @@ expo-updates@~0.25.17:
     ignore "^5.3.1"
     resolve-from "^5.0.0"
 
-expo-video@^1.1.10:
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/expo-video/-/expo-video-1.1.10.tgz#b47c0d40c21f401236639424bd25d70c09316b7b"
-  integrity sha512-k9ecpgtwAK8Ut8enm8Jv398XkB/uVOyLLqk80M/d8pH9EN5CVrBQ7iEzWlR3quvVUFM7Uf5wRukJ4hk3mZ8NCg==
+expo-video@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/expo-video/-/expo-video-1.2.0.tgz#126083a78190829bd552939ff182dcef4868710a"
+  integrity sha512-dVLhNbB30IwJg5LhTeDNTSQLcHt4c596xZgfRBT8xFcsy3uRGX+ebU0Gh+vzYH0uQNptxzOtNlCVVtmbwEDRYw==
 
 expo-web-browser@~13.0.3:
   version "13.0.3"
@@ -7046,7 +7080,7 @@ mz@^2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nanoid@^3.1.23, nanoid@^3.3.7:
+nanoid@^3.1.23, nanoid@^3.3.1, nanoid@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
