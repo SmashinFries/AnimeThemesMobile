@@ -61,6 +61,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 					useLegacyPackaging: true, // keeps the app size smaller but launches slower
 					// newArchEnabled: true,
 				},
+				ios: {
+					deploymentTarget: '13.4',
+				},
 			},
 		],
 		'expo-asset',
