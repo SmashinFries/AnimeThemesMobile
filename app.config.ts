@@ -55,6 +55,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		'expo-secure-store',
 		'expo-video',
 		[
+			'expo-font',
+			{
+				fonts: ['./assets/fonts/Satoshi-Regular.otf'],
+			},
+		],
+		[
 			'expo-build-properties',
 			{
 				android: {
