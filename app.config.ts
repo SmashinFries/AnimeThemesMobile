@@ -2,12 +2,12 @@ import { ExpoConfig, ConfigContext } from 'expo/config';
 const IS_DEV = process.env.APP_VARIANT === 'development';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
-	name: IS_DEV ? 'ATM Dev' : 'ATM',
+	name: IS_DEV ? 'AniThemes Dev' : 'AniThemes',
 	slug: 'AnimeThemesMobile',
 	version: '1.0.0',
 	orientation: 'portrait',
 	icon: './assets/images/icon.png',
-	scheme: IS_DEV ? 'atmdev' : 'atm',
+	scheme: IS_DEV ? 'anithemesdev' : 'anithemes',
 	userInterfaceStyle: 'automatic',
 	splash: {
 		image: './assets/images/splash.png',
@@ -25,12 +25,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		supportsTablet: true,
 	},
 	android: {
-		package: IS_DEV ? 'com.kuzulabz.atmdev' : 'com.kuzulabz.atm',
+		package: IS_DEV ? 'com.kuzulabz.anithemesdev' : 'com.kuzulabz.anithemes',
 		adaptiveIcon: {
 			foregroundImage: './assets/images/adaptive-icon.png',
 			backgroundColor: '#ffffff',
 		},
-		// can never get deep links to work :(
+		// help! can never get deep links to work :(
 		intentFilters: [
 			{
 				action: 'View',
