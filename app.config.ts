@@ -30,7 +30,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			foregroundImage: './assets/images/adaptive-icon.png',
 			backgroundColor: '#ffffff',
 		},
-		permissions: ['REQUEST_INSTALL_PACKAGES'],
+		permissions: [
+			'REQUEST_INSTALL_PACKAGES',
+			'READ_EXTERNAL_STORAGE',
+			'WRITE_EXTERNAL_STORAGE',
+		],
 		// help! can never get deep links to work :(
 		intentFilters: [
 			{
