@@ -15,7 +15,7 @@ export const useHeaderAnim = (start = 40, end = 110) => {
 	const input_range = [start, end];
 	const { colors } = useTheme();
 	const rgbaColor = useMemo(
-		() => Color(colors.elevation.level3).fade(0.25).string(2),
+		() => Color(colors.elevation.level3).fade(0.15).string(2),
 		[colors.elevation.level3],
 	);
 	const scrollY = useSharedValue(0);

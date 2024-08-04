@@ -1,6 +1,8 @@
 import { ExpoConfig, ConfigContext } from 'expo/config';
 const IS_DEV = process.env.APP_VARIANT === 'development';
 
+const DEEPLINK_HOST = 'animethemes.moe';
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
 	name: IS_DEV ? 'AniThemes Dev' : 'AniThemes',
 	slug: 'AnimeThemesMobile',
@@ -35,15 +37,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			'READ_EXTERNAL_STORAGE',
 			'WRITE_EXTERNAL_STORAGE',
 		],
-		// help! can never get deep links to work :(
 		intentFilters: [
 			{
 				action: 'View',
 				data: [
 					{
 						scheme: 'https',
-						host: 'animethemes.moe',
+						host: DEEPLINK_HOST,
 						pathPrefix: '/anime',
+					},
+					{
+						scheme: 'https',
+						host: DEEPLINK_HOST,
+						pathPrefix: '/artist',
 					},
 				],
 				category: ['BROWSABLE', 'DEFAULT'],
@@ -63,6 +69,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-font',
 			{
 				fonts: ['./assets/fonts/Satoshi-Regular.otf'],
+			},
+		],
+		[
+			'expo-image-picker',
+			{
+				photosPermission: 'AniThemes accesses your photos to allow custom playlist images.',
 			},
 		],
 		[

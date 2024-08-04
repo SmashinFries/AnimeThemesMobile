@@ -73,7 +73,7 @@ export const PaperThemeProvider = ({ children }: PaperThemeProviderProps) => {
 			}>
 			<ThemeProvider value={isDarkMode ? DarkTheme : LightTheme}>
 				{children}
-				<StatusBar translucent style={isDarkMode ? 'light' : 'dark'} />
+				{/* <StatusBar translucent style={isDarkMode ? 'light' : 'dark'} /> */}
 			</ThemeProvider>
 		</PaperProvider>
 	);

@@ -8,4 +8,6 @@ export const copyToClipboard = async (text: string) => {
 };
 
 export const secToMinString = (seconds: number) =>
-	`${(seconds / 60).toFixed(0).padStart(2, '0')}:${(seconds % 60).toFixed(0).padStart(2, '0')}`;
+	`${Math.floor(Math.round(seconds) / 60)
+		.toFixed(0)
+		.padStart(2, '0')}:${(Math.round(seconds) % 60).toFixed(0).padStart(2, '0')}`;

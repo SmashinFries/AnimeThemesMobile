@@ -1,4 +1,10 @@
-import { ExploreDataResponse, ExploreDataTracks } from '../api/queries/types';
+import {
+	AnimeThemeResponse,
+	ExploreDataResponse,
+	ExploreDataTracks,
+	SearchAllResponse,
+	SearchThemesResponse,
+} from '../api/queries/types';
 import { CustomTrack } from '../types';
 
 export const exploreDataToTrack = (data: ExploreDataResponse): ExploreDataTracks => {
@@ -31,4 +37,61 @@ export const exploreDataToTrack = (data: ExploreDataResponse): ExploreDataTracks
 	}));
 
 	return { ...data, tracks };
+};
+
+export const animeThemeToTrack = (data: SearchThemesResponse): SearchThemesResponse => {
+	const tracks: CustomTrack[] = data.animethemes.map((theme) => ({
+		url: theme.animethemeentries[0].videos[0].audio.link,
+		title: theme.song.title,
+		artist: theme.song.artists?.map((artist) => artist.name)?.join(', '),
+		artistsData: theme.song.artists,
+		artwork: theme.anime.images?.find((img) => img.facet === 'Large Cover')?.link,
+		anime: {
+			id: theme.anime.id,
+			media_format: theme.anime.media_format,
+			name: theme.anime.name,
+			season: theme.anime.season,
+			year: theme.anime.year,
+			slug: theme.anime.slug,
+		},
+		videoUrl: theme.animethemeentries[0].videos[0].link,
+		episodes: theme.animethemeentries[0].episodes,
+		version: theme.animethemeentries[0]?.version,
+	}));
+
+	const newData: SearchThemesResponse = { ...data };
+
+	tracks.forEach((track, idx) => {
+		newData.animethemes[idx]['track'] = track;
+	});
+
+	return newData;
+};
+
+export const searchAllToTrack = (data: SearchAllResponse): SearchAllResponse => {
+	const tracks: CustomTrack[] = data.search.animethemes.map((theme) => ({
+		url: theme.animethemeentries[0].videos[0].audio.link,
+		title: theme.song.title,
+		artist: theme.song.artists?.map((artist) => artist.name)?.join(', '),
+		artistsData: theme.song.artists,
+		artwork: theme.anime.images?.find((img) => img.facet === 'Large Cover')?.link,
+		anime: {
+			id: theme.anime.id,
+			media_format: theme.anime.media_format,
+			name: theme.anime.name,
+			season: theme.anime.season,
+			year: theme.anime.year,
+			slug: theme.anime.slug,
+		},
+		videoUrl: theme.animethemeentries[0].videos[0].link,
+		episodes: theme.animethemeentries[0].episodes,
+		version: theme.animethemeentries[0]?.version,
+	}));
+
+	const newData: SearchAllResponse = { ...data };
+	tracks.forEach((track, idx) => {
+		newData.search.animethemes[idx]['track'] = track;
+	});
+
+	return newData;
 };
