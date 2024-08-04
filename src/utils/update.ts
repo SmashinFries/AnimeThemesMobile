@@ -17,7 +17,6 @@ export const launchAPK = async (destination: string) => {
 export const downloadAppUpdate = async (url: string, version: string) => {
 	const jobId = `anithemes${version.replaceAll('.', '-')}`;
 	const destination = `${FileSystem.documentDirectory}/${jobId}.apk`;
-	console.log('Destination:', destination);
 	let task = download({
 		id: jobId,
 		url: url,
@@ -28,15 +27,13 @@ export const downloadAppUpdate = async (url: string, version: string) => {
 			destination,
 		},
 	})
-		.begin(({ expectedBytes, headers }) => {
-			console.log(`Going to download ${expectedBytes} bytes!`);
-		})
-		.progress(({ bytesDownloaded, bytesTotal }) => {
-			console.log(`Downloaded: ${(bytesDownloaded / bytesTotal) * 100}%`);
-		})
+		// .begin(({ expectedBytes, headers }) => {
+		// 	console.log(`Going to download ${expectedBytes} bytes!`);
+		// })
+		// .progress(({ bytesDownloaded, bytesTotal }) => {
+		// 	console.log(`Downloaded: ${(bytesDownloaded / bytesTotal) * 100}%`);
+		// })
 		.done(({ bytesDownloaded, bytesTotal }) => {
-			console.log('Download is done!', { bytesDownloaded, bytesTotal });
-
 			// PROCESS YOUR STUFF
 			launchAPK(destination);
 
@@ -44,25 +41,24 @@ export const downloadAppUpdate = async (url: string, version: string) => {
 			completeHandler(jobId);
 		})
 		.error(({ error, errorCode }) => {
-			console.log('Download canceled due to error: ', { error, errorCode });
+			// console.log('Download canceled due to error: ', { error, errorCode });
 		});
 };
 
 export const reattachDownloads = async () => {
 	let lostTasks = await RNBackgroundDownloader.checkForExistingDownloads();
 	for (let task of lostTasks) {
-		console.log(`Task ${task.id} was found!`);
 		task.progress(({ bytesDownloaded, bytesTotal }) => {
-			console.log(`Downloaded: ${(bytesDownloaded / bytesTotal) * 100}%`);
+			// console.log(`Downloaded: ${(bytesDownloaded / bytesTotal) * 100}%`);
 		})
 			.done(({ bytesDownloaded, bytesTotal }) => {
 				if (task.metadata.type === 'update') {
 					launchAPK(task.metadata.destination);
 				}
-				console.log('Download is done!', { bytesDownloaded, bytesTotal });
+				// console.log('Download is done!', { bytesDownloaded, bytesTotal });
 			})
 			.error(({ error, errorCode }) => {
-				console.log('Download canceled due to error: ', { error, errorCode });
+				// console.log('Download canceled due to error: ', { error, errorCode });
 			});
 	}
 };
@@ -71,7 +67,6 @@ export const removeUpdateAPKs = async () => {
 	const dir = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory as string);
 	for (const file of dir) {
 		if (file.includes('anithemes') && file.includes('.apk')) {
-			console.log('Found!:', `${FileSystem.documentDirectory as string}/${file}`);
 			await FileSystem.deleteAsync(`${FileSystem.documentDirectory as string}/${file}`);
 		}
 	}

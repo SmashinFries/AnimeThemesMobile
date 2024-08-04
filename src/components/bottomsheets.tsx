@@ -18,6 +18,8 @@ import { router } from 'expo-router';
 import Markdown from 'react-native-markdown-display';
 import { downloadAppUpdate } from '../utils/update';
 import { Playlist, usePlaylistStore } from '../store/playlists';
+import { Image } from 'expo-image';
+import { BLURHASH } from '../constants';
 
 type PlayerBottomSheetProps = {
 	track: CustomTrack | undefined;
@@ -51,7 +53,6 @@ export const PlayerBottomSheet = React.forwardRef<BottomSheetModalMethods, Playe
 		};
 
 		const shareLink = async () => {
-			console.log(siteLink ?? 'None');
 			await Share.share({ url: siteLink, message: siteLink });
 			dismiss();
 		};
@@ -118,108 +119,97 @@ export const PlayerBottomSheet = React.forwardRef<BottomSheetModalMethods, Playe
 );
 
 // eslint-disable-next-line react/display-name
-export const SongBottomSheet = React.forwardRef<BottomSheetModalMethods, PlayerBottomSheetProps>(
-	({ track, playlistId }, ref) => {
-		const { colors } = useTheme();
-		const { dismiss } = useBottomSheetModal();
-		const { removeFromPlaylist } = usePlaylistStore();
-		const animeLink = `https://animethemes.moe/anime/${track?.anime?.slug}`;
-		const shareLink = animeLink + `/${track?.animetheme?.slug}`;
+export const SongBottomSheet = React.forwardRef<
+	BottomSheetModalMethods,
+	PlayerBottomSheetProps & { onPlaylistAdd: () => void }
+>(({ track, onPlaylistAdd }, ref) => {
+	const { colors } = useTheme();
+	const { dismiss } = useBottomSheetModal();
+	// const { removeFromPlaylist } = usePlaylistStore();
+	const animeLink = `https://animethemes.moe/anime/${track?.anime?.slug}`;
+	const shareLink = animeLink + `/${track?.animetheme?.slug}`;
 
-		const addToQueue = async () => {
-			if (track) {
-				dismiss();
-				await TrackPlayer.add([track]);
-				await sendCompletionToast('Added to Queue!');
-			}
-		};
-
-		const viewAnime = () => {
+	const addToQueue = async () => {
+		if (track) {
 			dismiss();
-			router.navigate('/anime/' + track?.anime?.slug);
-		};
+			await TrackPlayer.add([track]);
+			await sendCompletionToast('Added to Queue!');
+		}
+	};
 
-		const viewArtist = (slug: string) => {
-			dismiss();
-			router.navigate('/artist/' + slug);
-		};
+	const viewAnime = () => {
+		dismiss();
+		router.navigate('/anime/' + track?.anime?.slug);
+	};
 
-		const shareThemeLink = async () => {
-			console.log(shareLink ?? 'None');
-			await Share.share({ url: shareLink, message: shareLink });
-			dismiss();
-		};
+	const viewArtist = (slug: string) => {
+		dismiss();
+		router.navigate('/artist/' + slug);
+	};
 
-		return (
-			<BottomSheetModal
-				ref={ref}
-				backgroundStyle={[{ backgroundColor: colors.surface }]}
-				handleIndicatorStyle={{ backgroundColor: colors.onSurfaceVariant }}
-				enableDynamicSizing
-				enableDismissOnClose
-				backdropComponent={(props) => (
-					<BottomSheetBackdrop
-						{...props}
-						pressBehavior={'close'}
-						disappearsOnIndex={-1}
+	const shareThemeLink = async () => {
+		await Share.share({ url: shareLink, message: shareLink });
+		dismiss();
+	};
+
+	return (
+		<BottomSheetModal
+			ref={ref}
+			backgroundStyle={[{ backgroundColor: colors.surface }]}
+			handleIndicatorStyle={{ backgroundColor: colors.onSurfaceVariant }}
+			enableDynamicSizing
+			enableDismissOnClose
+			backdropComponent={(props) => (
+				<BottomSheetBackdrop {...props} pressBehavior={'close'} disappearsOnIndex={-1} />
+			)}>
+			<BottomSheetView>
+				<View style={{ paddingVertical: 12 }}>
+					<List.Item
+						title={'Search Spotify'}
+						left={(props) => <List.Icon {...props} icon="spotify" />}
+						onPress={() =>
+							Linking.openURL(
+								`https://open.spotify.com/search/${track?.title} ${track?.artist}`,
+							)
+						}
 					/>
-				)}>
-				<BottomSheetView>
-					<View style={{ paddingVertical: 12 }}>
-						<List.Item
-							title={'Search Spotify'}
-							left={(props) => <List.Icon {...props} icon="spotify" />}
-							onPress={() =>
-								Linking.openURL(
-									`https://open.spotify.com/search/${track?.title} ${track?.artist}`,
-								)
-							}
-						/>
-						{/* <List.Item
+					<List.Item
 						title={'Add to Playlist'}
 						left={(props) => <List.Icon {...props} icon="plus" />}
+						onPress={() => {
+							dismiss();
+							onPlaylistAdd();
+						}}
+					/>
+					<List.Item
+						title={'Add to Queue'}
+						left={(props) => <List.Icon {...props} icon="playlist-plus" />}
 						onPress={addToQueue}
-					/> */}
+					/>
+					{track?.artistsData?.map((artist, idx) => (
 						<List.Item
-							title={'Add to Queue'}
-							left={(props) => <List.Icon {...props} icon="playlist-plus" />}
-							onPress={addToQueue}
+							key={idx}
+							title={'View Artist'}
+							description={artist.name}
+							onPress={() => viewArtist(artist.slug)}
+							left={(props) => <List.Icon {...props} icon="account" />}
 						/>
-						{track?.artistsData?.map((artist, idx) => (
-							<List.Item
-								key={idx}
-								title={'View Artist'}
-								description={artist.name}
-								onPress={() => viewArtist(artist.slug)}
-								left={(props) => <List.Icon {...props} icon="account" />}
-							/>
-						))}
-						<List.Item
-							title={'View Anime'}
-							onPress={viewAnime}
-							left={(props) => <List.Icon {...props} icon="television" />}
-						/>
-						<List.Item
-							title={'Share'}
-							left={(props) => <List.Icon {...props} icon="share-variant-outline" />}
-							onPress={shareThemeLink}
-						/>
-						{playlistId !== undefined && playlistId >= 0 && (
-							<List.Item
-								title={'Remove from List'}
-								onPress={() => {
-									track && removeFromPlaylist(playlistId, track);
-									dismiss();
-								}}
-								left={(props) => <List.Icon {...props} icon="trash-can-outline" />}
-							/>
-						)}
-					</View>
-				</BottomSheetView>
-			</BottomSheetModal>
-		);
-	},
-);
+					))}
+					<List.Item
+						title={'View Anime'}
+						onPress={viewAnime}
+						left={(props) => <List.Icon {...props} icon="television" />}
+					/>
+					<List.Item
+						title={'Share'}
+						left={(props) => <List.Icon {...props} icon="share-variant-outline" />}
+						onPress={shareThemeLink}
+					/>
+				</View>
+			</BottomSheetView>
+		</BottomSheetModal>
+	);
+});
 
 type UpdaterBottomSheetProps = {
 	updateDetails: GithubReleaseResponse[0] | null;
@@ -277,13 +267,15 @@ export const UpdaterBottomSheet = React.forwardRef<
 					<Divider style={{ height: 2 }} />
 				</View>
 			</BottomSheetView>
-			<BottomSheetScrollView>
-				<View style={{ padding: 10 }}>
-					<Markdown style={{ body: { color: colors.onSurface } }}>
-						{updateDetails?.body}
-					</Markdown>
-				</View>
-			</BottomSheetScrollView>
+			{updateDetails?.body && (
+				<BottomSheetScrollView>
+					<View style={{ padding: 10 }}>
+						<Markdown style={{ body: { color: colors.onSurface } }}>
+							{updateDetails.body}
+						</Markdown>
+					</View>
+				</BottomSheetScrollView>
+			)}
 			<BottomSheetView>
 				<Divider style={{ height: 2 }} />
 				<View
@@ -375,7 +367,6 @@ export const PlaylistsBottomSheet = React.forwardRef<
 	};
 
 	const onView = () => {
-		console.log('playlist:', playlist);
 		if (playlist) {
 			router.push({
 				pathname: '/(tabs)/playlists/[id]',
@@ -440,17 +431,15 @@ export const PlaylistsAddBottomSheet = React.forwardRef<
 	PlaylistsAddBottomSheetProps
 >(({ track }, ref) => {
 	const { colors } = useTheme();
-	// const { dismiss } = useBottomSheetModal();
+	const { dismiss } = useBottomSheetModal();
 	const { playlists, addToPlaylist, removeFromPlaylist } = usePlaylistStore();
 
 	const onSelect = useCallback(
 		(id: number) => {
 			if (track) {
 				if (playlists[id].tracks.includes(track)) {
-					console.log('Removing', track.title);
 					removeFromPlaylist(id, track);
 				} else {
-					console.log('Adding', track.title);
 					addToPlaylist(id, [track]);
 				}
 			}
@@ -465,13 +454,20 @@ export const PlaylistsAddBottomSheet = React.forwardRef<
 					title={item.title}
 					description={item.description}
 					onPress={() => onSelect(item.id)}
-					left={(props) => <List.Image {...props} source={{ uri: item.coverImg }} />}
+					// left={(props) => <List.Image {...props} source={{ uri: item.coverImg }} />}
+					left={(props) => (
+						<Image
+							source={{ uri: item.coverImg }}
+							placeholder={{ blurhash: BLURHASH }}
+							style={[{ width: 56, height: 56 }, props.style]}
+						/>
+					)}
 					right={(props) =>
 						track && (
 							<List.Icon
 								{...props}
 								icon={
-									item.tracks.includes(track)
+									item.tracks.some((val) => val.url === track.url)
 										? 'checkbox-marked-circle'
 										: 'checkbox-blank-circle-outline'
 								}
@@ -498,6 +494,20 @@ export const PlaylistsAddBottomSheet = React.forwardRef<
 				data={playlists}
 				renderItem={renderPlaylist}
 				keyExtractor={({ id }) => id.toString()}
+				ListHeaderComponent={() => (
+					<List.Item
+						title={'Create Playlist'}
+						left={(props) => <List.Icon icon={'plus'} {...props} />}
+						onPress={() => {
+							dismiss();
+							router.navigate({
+								pathname: 'create',
+								params: { track: JSON.stringify(track) },
+							});
+						}}
+						style={playlists.length < 1 && { paddingVertical: 20 }}
+					/>
+				)}
 			/>
 		</BottomSheetModal>
 	);

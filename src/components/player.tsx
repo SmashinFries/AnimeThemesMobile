@@ -44,7 +44,6 @@ export const GlobalPlayer = () => {
 	}, []);
 
 	const onPlay = async () => {
-		console.log(state);
 		if (state === State.Playing) {
 			await TrackPlayer.pause();
 		} else if (state && [State.Paused, State.Ready, State.Buffering].includes(state)) {

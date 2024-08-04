@@ -31,12 +31,8 @@ export const PlayerTrackSlider = ({
 				/>
 			</View>
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-				<Text onPress={() => console.log(Math.round(position))}>
-					{secToMinString(position)}
-				</Text>
-				<Text onPress={() => console.log(Math.round(duration) / 60)}>
-					{secToMinString(duration)}
-				</Text>
+				<Text>{secToMinString(position)}</Text>
+				<Text>{secToMinString(duration)}</Text>
 			</View>
 		</View>
 	);

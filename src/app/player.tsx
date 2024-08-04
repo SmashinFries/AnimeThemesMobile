@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { VideoBackground } from '../components/background';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Slider from '@react-native-community/slider';
-import { secToMinString } from '../utils/text';
+import { copyToClipboard, secToMinString } from '../utils/text';
 import { Image } from 'expo-image';
 import { PlayerBottomSheet, PlaylistsAddBottomSheet } from '../components/bottomsheets';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
@@ -169,7 +169,7 @@ const PlayerModalPage = () => {
 					onPress={onBack}
 					iconColor={colors.onSurface}
 				/>
-				<View style={{ alignItems: 'center' }}>
+				<View style={{ alignItems: 'center', flex: 1 }}>
 					<Text style={{ fontWeight: '900' }}>{activeTrack?.animetheme?.slug}</Text>
 					<Text numberOfLines={1}>{activeTrack?.title}</Text>
 				</View>
@@ -188,13 +188,20 @@ const PlayerModalPage = () => {
 							style={{
 								width: '100%',
 								flexDirection: 'row',
-								justifyContent: 'space-around',
+								justifyContent: 'space-between',
 								padding: 10,
 							}}>
-							<View style={{ alignItems: 'flex-start', paddingHorizontal: 10 }}>
+							<View
+								style={{
+									alignSelf: 'flex-start',
+									alignItems: 'flex-start',
+									flexShrink: 1,
+									paddingHorizontal: 10,
+								}}>
 								<Text
 									variant="titleLarge"
-									numberOfLines={2}
+									numberOfLines={3}
+									onLongPress={() => copyToClipboard(activeTrack?.title)}
 									style={{ fontWeight: '900' }}>
 									{activeTrack?.title}
 								</Text>

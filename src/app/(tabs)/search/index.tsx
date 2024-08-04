@@ -10,12 +10,16 @@ import {
 	SearchArtistsResponse,
 	SearchThemesResponse,
 } from '@/src/api/queries/types';
+import { PlaylistsAddBottomSheet, SongBottomSheet } from '@/src/components/bottomsheets';
+import { SearchItem } from '@/src/components/cards';
 import { LoadingView, StackView } from '@/src/components/view';
 import { BLURHASH } from '@/src/constants';
 import useDebounce from '@/src/hooks/useDebounce';
+import { CustomTrack } from '@/src/types';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FlatList, Pressable, SectionList, SectionListProps, View } from 'react-native';
 import {
 	IconButton,
@@ -50,59 +54,60 @@ const buttons: SegmentedButtonsProps['buttons'] = [
 	},
 ];
 
-type SearchItemProps = {
-	title: string;
-	type: string;
-	onPress: () => void;
-	onLongPress?: () => void;
-	imageUrl?: string;
-	details?: string;
-};
-const SearchItem = ({ title, type, details, imageUrl, onPress, onLongPress }: SearchItemProps) => {
-	const { colors } = useTheme();
+// type SearchItemProps = {
+// 	title: string;
+// 	type: string;
+// 	onPress: () => void;
+// 	onLongPress?: () => void;
+// 	imageUrl?: string;
+// 	details?: string;
+// };
+// const SearchItem = ({ title, type, details, imageUrl, onPress, onLongPress }: SearchItemProps) => {
+// 	const { colors } = useTheme();
 
-	return (
-		<Surface
-			style={{ padding: 5, borderRadius: 8, justifyContent: 'center', marginVertical: 6 }}>
-			<Pressable onPress={onPress} onLongPress={onLongPress}>
-				<View style={{ flexDirection: 'row' }}>
-					<Image
-						source={{ uri: imageUrl }}
-						style={{
-							aspectRatio: 1 / 1,
-							width: undefined,
-							height: 80,
-							borderRadius: 12,
-						}}
-						placeholder={{ blurhash: BLURHASH }}
-						contentFit="cover"
-					/>
-					<View style={{ flex: 1, paddingHorizontal: 10, justifyContent: 'center' }}>
-						<Text variant="titleMedium" numberOfLines={2} style={{ fontWeight: '900' }}>
-							{title}
-						</Text>
-						<Text variant="labelMedium" style={{ color: colors.onSurfaceVariant }}>
-							{type}
-							{details ? ` ・ ${details}` : ''}
-						</Text>
-					</View>
-					<IconButton
-						icon={'dots-vertical'}
-						style={{ alignSelf: 'center' }}
-						onPress={onLongPress}
-					/>
-				</View>
-			</Pressable>
-		</Surface>
-	);
-};
+// 	return (
+// 		<Surface
+// 			style={{ padding: 5, borderRadius: 8, justifyContent: 'center', marginVertical: 6 }}>
+// 			<Pressable onPress={onPress} onLongPress={onLongPress}>
+// 				<View style={{ flexDirection: 'row' }}>
+// 					<Image
+// 						source={{ uri: imageUrl }}
+// 						style={{
+// 							aspectRatio: 1 / 1,
+// 							width: undefined,
+// 							height: 80,
+// 							borderRadius: 12,
+// 						}}
+// 						placeholder={{ blurhash: BLURHASH }}
+// 						contentFit="cover"
+// 					/>
+// 					<View style={{ flex: 1, paddingHorizontal: 10, justifyContent: 'center' }}>
+// 						<Text variant="titleMedium" numberOfLines={2} style={{ fontWeight: '900' }}>
+// 							{title}
+// 						</Text>
+// 						<Text variant="labelMedium" style={{ color: colors.onSurfaceVariant }}>
+// 							{type}
+// 							{details ? ` ・ ${details}` : ''}
+// 						</Text>
+// 					</View>
+// 					<IconButton
+// 						icon={'dots-vertical'}
+// 						style={{ alignSelf: 'center' }}
+// 						onPress={onLongPress}
+// 					/>
+// 				</View>
+// 			</Pressable>
+// 		</Surface>
+// 	);
+// };
 
 type AllListProps = {
 	data?: SearchAllResponse | undefined;
 	header?: SectionListProps<any>['ListHeaderComponent'];
 	isFetching?: boolean;
+	onTrackSelect: (track: CustomTrack) => void;
 };
-const AllList = ({ data, header, isFetching }: AllListProps) => {
+const AllList = ({ data, header, isFetching, onTrackSelect }: AllListProps) => {
 	const renderAnimeItem = ({ item }: { item: SearchAllResponse['search']['anime'][0] }) => {
 		return (
 			<SearchItem
@@ -134,6 +139,7 @@ const AllList = ({ data, header, isFetching }: AllListProps) => {
 						TrackPlayer.play();
 					}
 				}}
+				onLongPress={() => item.track && onTrackSelect(item.track)}
 				details={
 					item.song.artists.length > 0
 						? `by ${item.song.artists?.map((artist) => artist.name).join(', ')}`
@@ -225,11 +231,9 @@ const AnimeList = ({ query }: { query: string }) => {
 		const latestIndex = data ? data?.pages.length - 1 : null;
 		if (data && latestIndex !== null && data?.pages[latestIndex].meta.total) {
 			if (flattenData.length < data.pages[latestIndex].meta.total) {
-				console.log('Has Total and fetching!');
 				await fetchNextPage();
 			}
 		} else if (data && latestIndex !== null) {
-			console.log('No total but fetching!');
 			await fetchNextPage();
 		}
 	};
@@ -246,7 +250,13 @@ const AnimeList = ({ query }: { query: string }) => {
 	);
 };
 
-const ThemeList = ({ query }: { query: string }) => {
+const ThemeList = ({
+	query,
+	onTrackSelect,
+}: {
+	query: string;
+	onTrackSelect: (track: CustomTrack) => void;
+}) => {
 	const { data, fetchNextPage } = useSearchThemes(query);
 
 	const flattenData = data?.pages ? data?.pages?.flatMap((page) => [...page.animethemes]) : [];
@@ -262,7 +272,7 @@ const ThemeList = ({ query }: { query: string }) => {
 						TrackPlayer.play();
 					}
 				}}
-				onLongPress={() => null}
+				onLongPress={() => item.track && onTrackSelect(item.track)}
 				details={`by ${item.song.artists?.map((artist) => artist.name).join(', ')}`}
 				imageUrl={item.anime.images[0]?.link}
 			/>
@@ -273,11 +283,9 @@ const ThemeList = ({ query }: { query: string }) => {
 		const latestIndex = data ? data?.pages.length - 1 : null;
 		if (data && latestIndex !== null && data?.pages[latestIndex].meta.total) {
 			if (flattenData.length < data.pages[latestIndex].meta.total) {
-				console.log('Has Total and fetching!');
 				await fetchNextPage();
 			}
 		} else if (data && latestIndex !== null) {
-			console.log('No total but fetching!');
 			await fetchNextPage();
 		}
 	};
@@ -320,11 +328,9 @@ const ArtistsList = ({ query }: { query: string }) => {
 		const latestIndex = data ? data?.pages.length - 1 : null;
 		if (data && latestIndex !== null && data?.pages[latestIndex].meta.total) {
 			if (flattenData.length < data.pages[latestIndex].meta.total) {
-				console.log('Has Total and fetching!');
 				await fetchNextPage();
 			}
 		} else if (data && latestIndex !== null) {
-			console.log('No total but fetching!');
 			await fetchNextPage();
 		}
 	};
@@ -342,12 +348,20 @@ const ArtistsList = ({ query }: { query: string }) => {
 };
 
 const SearchPage = () => {
+	const songBtmSheetRef = useRef<BottomSheetModal>(null);
+	const playlistAddSheetRef = useRef<BottomSheetModal>(null);
 	const { top } = useSafeAreaInsets();
 	const [query, setQuery] = useState<string>('');
 	const debouncedSearch = useDebounce(query, 600);
 	const { data, isFetching } = useSearchAll(debouncedSearch);
 
 	const [catSelected, setCatSelected] = useState<Categories>('all');
+	const [selectedTrack, setSelectedTrack] = useState<CustomTrack>();
+
+	const onTrackSelect = (track: CustomTrack) => {
+		setSelectedTrack(track);
+		songBtmSheetRef.current?.present();
+	};
 
 	return (
 		<StackView style={{ paddingTop: top + 20, paddingHorizontal: 10 }}>
@@ -359,11 +373,23 @@ const SearchPage = () => {
 				style={{ marginVertical: 12 }}
 			/>
 			{catSelected === 'all' && (
-				<AllList data={query.length > 0 ? data : undefined} isFetching={isFetching} />
+				<AllList
+					data={query.length > 0 ? data : undefined}
+					isFetching={isFetching}
+					onTrackSelect={onTrackSelect}
+				/>
 			)}
 			{catSelected === 'anime' && <AnimeList query={debouncedSearch} />}
-			{catSelected === 'animetheme' && <ThemeList query={debouncedSearch} />}
+			{catSelected === 'animetheme' && (
+				<ThemeList query={debouncedSearch} onTrackSelect={onTrackSelect} />
+			)}
 			{catSelected === 'artist' && <ArtistsList query={debouncedSearch} />}
+			<SongBottomSheet
+				ref={songBtmSheetRef}
+				track={selectedTrack}
+				onPlaylistAdd={() => playlistAddSheetRef.current?.present()}
+			/>
+			<PlaylistsAddBottomSheet ref={playlistAddSheetRef} track={selectedTrack} />
 		</StackView>
 	);
 };

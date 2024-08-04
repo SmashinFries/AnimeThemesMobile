@@ -74,7 +74,7 @@ const RootLayout = () => {
 
 	useEffect(() => {
 		runInitialSetup();
-		// Platform.OS !== 'web' && runUpdateChecker();
+		Platform.OS !== 'web' && runUpdateChecker();
 	}, []);
 
 	return (

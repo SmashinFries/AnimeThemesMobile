@@ -1,7 +1,7 @@
 import { useArtist } from '@/src/api/queries/hooks';
 import { router } from 'expo-router';
 import { Linking, Pressable, ScrollView, View } from 'react-native';
-import { Avatar, Button, Chip, IconButton, Surface, Text } from 'react-native-paper';
+import { Avatar, Button, Chip, IconButton, List, Surface, Text } from 'react-native-paper';
 import { LoadingView } from '../view';
 import { AnimHeaderFlatlist } from '../list';
 import { ArtistResponse } from '@/src/api/queries/types';
@@ -36,7 +36,9 @@ const ArtistHeader = ({ data }: { data: ArtistResponse | undefined }) => {
 			</Text>
 			{data?.artist?.members && data?.artist?.members.length > 0 && (
 				<View style={{ flex: 1, width: '100%', paddingVertical: 5 }}>
-					<Text variant="titleMedium">Members</Text>
+					<Text variant="titleMedium" style={{ paddingLeft: 10 }}>
+						Members
+					</Text>
 					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
 						{data?.artist?.members?.map((member, idx) => (
 							<Chip
@@ -57,8 +59,13 @@ const ArtistHeader = ({ data }: { data: ArtistResponse | undefined }) => {
 			)}
 			{data && data.artist?.resources?.length > 0 && (
 				<View style={{ flex: 1, width: '100%', paddingVertical: 5 }}>
-					<Text variant="titleMedium">Links</Text>
-					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+					<Text variant="titleMedium" style={{ paddingLeft: 10 }}>
+						Links
+					</Text>
+					<ScrollView
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						contentContainerStyle={{ paddingLeft: 10 }}>
 						{data.artist.resources.map((resource, idx) => (
 							<Chip
 								key={idx}
@@ -79,6 +86,7 @@ const ArtistHeader = ({ data }: { data: ArtistResponse | undefined }) => {
 					alignItems: 'center',
 					marginTop: 30,
 					marginBottom: 10,
+					paddingLeft: 10,
 				}}>
 				<Text variant="titleMedium">
 					Song Performances {`(${data?.artist?.songs?.length})`}
@@ -95,10 +103,8 @@ const ArtistPage = ({ slug }: { slug: string | undefined }) => {
 	const bottomSheetRef = useRef<BottomSheetModal>(null);
 
 	const playTrack = async (track: CustomTrack) => {
-		const queue = await TrackPlayer.getQueue();
-		await TrackPlayer.add([track], queue.length > 1 ? 1 : undefined);
-		queue.length > 1 && (await TrackPlayer.remove([0]));
-		await TrackPlayer.play();
+		await TrackPlayer.load(track);
+		TrackPlayer.play();
 	};
 
 	const onSheetOpen = (track: CustomTrack) => {
@@ -122,7 +128,14 @@ const ArtistPage = ({ slug }: { slug: string | undefined }) => {
 			artistsData: item.artists,
 		};
 		return (
-			<Surface style={{ flex: 1, marginVertical: 10, padding: 10, borderRadius: 8 }}>
+			<Surface
+				style={{
+					flex: 1,
+					marginVertical: 10,
+					padding: 10,
+					borderRadius: 8,
+					marginHorizontal: 10,
+				}}>
 				<View
 					style={{
 						flexDirection: 'row',
@@ -189,7 +202,7 @@ const ArtistPage = ({ slug }: { slug: string | undefined }) => {
 				renderItem={renderItem}
 				keyExtractor={(_, idx) => idx.toString()}
 				shareLink={`https://animethemes.moe/artist/${slug}`}
-				contentContainerStyle={{ paddingBottom: 80, paddingHorizontal: 10 }}
+				contentContainerStyle={{ paddingBottom: 80 }}
 			/>
 			{/* <FlatList
                 data={data?.artist.songs}

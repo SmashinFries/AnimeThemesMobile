@@ -1,6 +1,5 @@
 export const getSeason = (next = false) => {
 	const date = new Date();
-	console.log('Date', date);
 	const SEASONS = {
 		Winter: [1, 2, 3],
 		Spring: [4, 5, 6],

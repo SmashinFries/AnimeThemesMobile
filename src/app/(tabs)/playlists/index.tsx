@@ -1,8 +1,10 @@
 import { PlaylistsBottomSheet } from '@/src/components/bottomsheets';
 import { PlaylistsHeader } from '@/src/components/headers';
 import { StackView } from '@/src/components/view';
+import { BLURHASH } from '@/src/constants';
 import { Playlist, usePlaylistStore } from '@/src/store/playlists';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { Image } from 'expo-image';
 import { router, Stack } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Pressable, ScrollView } from 'react-native';
@@ -35,7 +37,15 @@ const PlaylistsPage = () => {
 							title={pl.title}
 							description={pl.description}
 							left={(props) => (
-								<List.Image {...props} source={{ uri: pl.coverImg ?? undefined }} />
+								<Image
+									source={{ uri: pl.coverImg ?? undefined }}
+									placeholder={{ blurhash: BLURHASH }}
+									style={[
+										{ width: 56, height: 56, borderRadius: 12 },
+										props.style,
+									]}
+								/>
+								// <List.Image {...props} source={{ uri: pl.coverImg ?? undefined }} />
 							)}
 							right={(props) => (
 								<Pressable {...props} onPress={() => onSelected(pl)}>

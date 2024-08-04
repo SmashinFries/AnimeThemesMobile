@@ -6,6 +6,7 @@ import { useTheme } from 'react-native-paper';
 import { Image } from 'expo-image';
 import { Event, State, useProgress, useTrackPlayerEvents } from 'react-native-track-player';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BLURHASH } from '../constants';
 // import { View } from 'react-native';
 
 const VIDEO_SIZE = 350;
@@ -107,6 +108,7 @@ export const ImageBackground = ({
 				contentFit="cover"
 				style={{ width: '100%', height: fullscreen ? height : size }}
 				blurRadius={1}
+				placeholder={{ blurhash: BLURHASH }}
 			/>
 			<LinearGradient
 				style={{ position: 'absolute', width: '100%', height: fullscreen ? height : size }}

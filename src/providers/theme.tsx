@@ -2,6 +2,7 @@ import { DarkTheme as NavDarkTheme, DefaultTheme, ThemeProvider } from '@react-n
 import { ReactNode, useEffect } from 'react';
 import {
 	adaptNavigationTheme,
+	configureFonts,
 	MD3DarkTheme,
 	MD3LightTheme,
 	MD3Theme,
@@ -9,16 +10,21 @@ import {
 } from 'react-native-paper';
 import { useThemeStore } from '../store/theme';
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
+import { MD3Type } from 'react-native-paper/lib/typescript/types';
+
+const fontConfig: {
+	config?: Partial<MD3Type>;
+	isV3?: true;
+} = {
+	isV3: true,
+	config: {
+		fontFamily: 'Satoshi-Regular',
+	},
+};
 
 const PaperLightTheme: MD3Theme = {
 	...MD3LightTheme,
-	fonts: {
-		...MD3LightTheme.fonts,
-		default: {
-			...MD3LightTheme.fonts.default,
-			fontFamily: 'Satoshi-Regular',
-		},
-	},
+	fonts: configureFonts(fontConfig),
 };
 
 const PaperDarkTheme: MD3Theme = {

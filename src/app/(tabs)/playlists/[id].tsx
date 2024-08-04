@@ -137,11 +137,11 @@ const PlaylistPage = () => {
 					header: (props) => <AnimHeader {...props} {...headerAnim} />,
 				}}
 			/>
-			<Animated.View entering={FadeIn}>
+			<View>
 				{/* {data && <AnimeHeader data={data} />} */}
 				<Animated.FlatList
 					ref={listRef}
-					data={playlists[playlistID]?.tracks}
+					data={playlists[playlistID]?.tracks.reverse()}
 					renderItem={renderItem}
 					keyExtractor={(_, idx) => idx.toString()}
 					ListHeaderComponent={listHeaderComponent}
@@ -149,8 +149,13 @@ const PlaylistPage = () => {
 					onScroll={headerAnim.scrollHandler}
 				/>
 				{/* <Button onPress={() => console.log(themes)}>PRINT PARAMS</Button> */}
-			</Animated.View>
-			<SongBottomSheet ref={trackBtmSheetRef} track={selectedTrack} playlistId={playlistID} />
+			</View>
+			<SongBottomSheet
+				ref={trackBtmSheetRef}
+				track={selectedTrack}
+				playlistId={playlistID}
+				onPlaylistAdd={() => null}
+			/>
 		</StackView>
 	);
 };

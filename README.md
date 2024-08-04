@@ -2,6 +2,10 @@
 An unoffical [AnimeThemes](https://animethemes.moe/) app.
 
 ## Plans
+- [ ] gesture controls
+- [ ] community playlists
+- [ ] playlist filters / sorting
+- [ ] improve home tab
 - [ ] use shazamkit for identifying songs
 
 ## Development

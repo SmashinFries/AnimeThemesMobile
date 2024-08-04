@@ -1,6 +1,6 @@
 import { useDiscover, useMostViewed, useRecentlyAdded } from '@/src/api/queries/hooks';
 import { ExploreDataTracks } from '@/src/api/queries/types';
-import { SongBottomSheet } from '@/src/components/bottomsheets';
+import { PlaylistsAddBottomSheet, SongBottomSheet } from '@/src/components/bottomsheets';
 import { SongBoxCard } from '@/src/components/cards';
 import { StackView } from '@/src/components/view';
 import { CustomTrack } from '@/src/types';
@@ -17,13 +17,20 @@ type HomeSectionProps = {
 	title: string;
 	tracks: CustomTrack[] | undefined;
 	videos: ExploreDataTracks['videos'] | undefined;
-	onPress: (tracks: CustomTrack[]) => void;
+	onPress: (track: CustomTrack) => void;
 	onLongPress: (track: CustomTrack) => void;
 };
 const HomeSection = ({ title, tracks, videos, onPress, onLongPress }: HomeSectionProps) => {
 	return (
-		<Animated.View entering={FadeIn} style={{ paddingVertical: 12 }}>
-			<Text variant="headlineMedium" style={{ paddingLeft: 10, paddingVertical: 10 }}>
+		<Animated.View entering={FadeIn}>
+			<Text
+				variant="headlineMedium"
+				style={{
+					fontFamily: 'Satoshi-Regular',
+					fontWeight: 'bold',
+					paddingLeft: 10,
+					paddingVertical: 10,
+				}}>
 				{title}
 			</Text>
 			<ScrollView
@@ -35,7 +42,7 @@ const HomeSection = ({ title, tracks, videos, onPress, onLongPress }: HomeSectio
 						key={idx}
 						track={track}
 						videoBasename={videos ? videos[idx]?.basename : ''}
-						onPress={() => onPress([track])}
+						onPress={() => onPress(track)}
 						onLongPress={() => onLongPress(track)}
 					/>
 				))}
@@ -46,15 +53,16 @@ const HomeSection = ({ title, tracks, videos, onPress, onLongPress }: HomeSectio
 
 const HomePage = () => {
 	const btmSheetRef = useRef<BottomSheetModal>(null);
+	const playlistAddSheetRef = useRef<BottomSheetModal>(null);
 	const [selectedTrack, setSelectedTrack] = useState<CustomTrack>();
 	const discover = useDiscover();
 	const recentlyAdded = useRecentlyAdded();
 	const mostViewed = useMostViewed();
 	const { isInternetReachable } = useNetInfo();
 
-	const addTrack = async (tracks: CustomTrack[]) => {
-		await TrackPlayer.reset();
-		await TrackPlayer.add(tracks);
+	const addTrack = async (track: CustomTrack) => {
+		// await TrackPlayer.reset();
+		await TrackPlayer.load(track);
 		await TrackPlayer.play();
 	};
 
@@ -69,7 +77,7 @@ const HomePage = () => {
 				<ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
 					<SafeAreaView style={{ paddingTop: 20 }}>
 						<HomeSection
-							title="Discover"
+							title="Random"
 							tracks={discover?.data?.tracks}
 							onPress={addTrack}
 							onLongPress={(track) => openSheet(track)}
@@ -96,7 +104,12 @@ const HomePage = () => {
 					<Text>Running in offline mode!</Text>
 				</View>
 			)}
-			<SongBottomSheet ref={btmSheetRef} track={selectedTrack} />
+			<SongBottomSheet
+				ref={btmSheetRef}
+				track={selectedTrack}
+				onPlaylistAdd={() => playlistAddSheetRef.current?.present()}
+			/>
+			<PlaylistsAddBottomSheet ref={playlistAddSheetRef} track={selectedTrack} />
 		</StackView>
 	);
 };

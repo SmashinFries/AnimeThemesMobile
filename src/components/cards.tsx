@@ -239,6 +239,7 @@ type SearchItemProps = {
 	onLongPress?: () => void;
 	imageUrl?: string;
 	details?: string;
+	icon?: string;
 };
 export const SearchItem = ({
 	title,
@@ -247,6 +248,7 @@ export const SearchItem = ({
 	imageUrl,
 	onPress,
 	onLongPress,
+	icon,
 }: SearchItemProps) => {
 	const { colors } = useTheme();
 
@@ -270,16 +272,21 @@ export const SearchItem = ({
 						<Text variant="titleMedium" numberOfLines={2} style={{ fontWeight: '900' }}>
 							{title}
 						</Text>
-						<Text variant="labelMedium" style={{ color: colors.onSurfaceVariant }}>
+						<Text
+							variant="labelMedium"
+							numberOfLines={2}
+							style={{ color: colors.onSurfaceVariant }}>
 							{type}
 							{details ? ` ・ ${details}` : ''}
 						</Text>
 					</View>
-					<IconButton
-						icon={'dots-vertical'}
-						style={{ alignSelf: 'center' }}
-						onPress={onLongPress}
-					/>
+					{onLongPress && (
+						<IconButton
+							icon={icon ?? 'dots-vertical'}
+							style={{ alignSelf: 'center' }}
+							onPress={onLongPress}
+						/>
+					)}
 				</View>
 			</Pressable>
 		</Surface>

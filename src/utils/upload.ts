@@ -20,7 +20,6 @@ export const getPlaylistImage = async () => {
 
 	if (!result.canceled) {
 		const file_loc = IMG_DIR + result.assets[0].uri.split('/').at(-1);
-		console.log(file_loc);
 		await FileSystem.copyAsync({
 			from: result.assets[0].uri,
 			to: file_loc,
