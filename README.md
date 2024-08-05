@@ -1,12 +1,16 @@
 # AniThemes 🎶
 An unoffical [AnimeThemes](https://animethemes.moe/) app.
 
+## Platforms
+- [x] 🤖 Android
+- [ ] 🖥️ Desktop (Windows, Linux, MacOS)
+
 ## Plans
 - [ ] gesture controls
 - [ ] community playlists
 - [ ] playlist filters / sorting
 - [ ] improve home tab
-- [ ] use shazamkit for identifying songs
+- [ ] use shazamkit for identifying songs (requires creating a native module)
 
 ## Development
 The latest dev build is available in each release!
