@@ -9,7 +9,7 @@ import {
 	PaperProvider,
 } from 'react-native-paper';
 import { useThemeStore } from '../store/theme';
-import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
+import { StatusBar, setStatusBarBackgroundColor, setStatusBarStyle } from 'expo-status-bar';
 import { MD3Type } from 'react-native-paper/lib/typescript/types';
 
 const fontConfig: {
@@ -29,24 +29,12 @@ const PaperLightTheme: MD3Theme = {
 
 const PaperDarkTheme: MD3Theme = {
 	...MD3DarkTheme,
-	fonts: {
-		...MD3DarkTheme.fonts,
-		default: {
-			...MD3DarkTheme.fonts.default,
-			fontFamily: 'Satoshi-Regular',
-		},
-	},
+	fonts: configureFonts(fontConfig),
 };
 
 const AMOLEDDarkTheme: MD3Theme = {
 	...MD3DarkTheme,
-	fonts: {
-		...MD3DarkTheme.fonts,
-		default: {
-			...MD3DarkTheme.fonts.default,
-			fontFamily: 'Satoshi-Regular',
-		},
-	},
+	fonts: configureFonts(fontConfig),
 	colors: {
 		...MD3DarkTheme.colors,
 		background: '#000000',
@@ -69,8 +57,13 @@ export const PaperThemeProvider = ({ children }: PaperThemeProviderProps) => {
 
 	useEffect(() => {
 		// StatusBar style doesnt react to state so we update it here
+		setStatusBarBackgroundColor(
+			(isDarkMode ? (isPureBlackMode ? AMOLEDDarkTheme : PaperDarkTheme) : PaperLightTheme)
+				.colors.background,
+			true,
+		);
 		setStatusBarStyle(isDarkMode ? 'light' : 'dark', true);
-	}, [isDarkMode]);
+	}, [isDarkMode, isPureBlackMode]);
 
 	return (
 		<PaperProvider
