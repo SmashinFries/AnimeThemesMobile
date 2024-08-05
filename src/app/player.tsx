@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
-import { ActivityIndicator, IconButton, Surface, Text, useTheme } from 'react-native-paper';
+import { IconButton, Surface, Text, useTheme } from 'react-native-paper';
 import TrackPlayer, {
 	Event,
 	RepeatMode,
@@ -15,8 +15,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { VideoBackground } from '../components/background';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Slider from '@react-native-community/slider';
-import { copyToClipboard, secToMinString } from '../utils/text';
+import { copyToClipboard } from '../utils/text';
 import { Image } from 'expo-image';
 import { PlayerBottomSheet, PlaylistsAddBottomSheet } from '../components/bottomsheets';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
@@ -37,6 +36,8 @@ const events = [
 // theres also little control over fullscreen video...
 
 // also not sure yet on a design that allows for both audio and video (esp. when it comes to playing in background)
+
+// maybe just pause audio when viewing the video :/
 
 const PlayerModalPage = () => {
 	const { height } = useWindowDimensions();

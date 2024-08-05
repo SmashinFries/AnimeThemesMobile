@@ -9,7 +9,7 @@ import {
 	PaperProvider,
 } from 'react-native-paper';
 import { useThemeStore } from '../store/theme';
-import { StatusBar, setStatusBarBackgroundColor, setStatusBarStyle } from 'expo-status-bar';
+import { setStatusBarBackgroundColor, setStatusBarStyle } from 'expo-status-bar';
 import { MD3Type } from 'react-native-paper/lib/typescript/types';
 
 const fontConfig: {
