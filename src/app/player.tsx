@@ -22,6 +22,7 @@ import { PlayerBottomSheet, PlaylistsAddBottomSheet } from '../components/bottom
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { PlayerTrackSlider } from '../components/slider';
 import { TrackController } from '../components/controls';
+import { usePlaylistStore } from '../store/playlists';
 
 const events = [
 	Event.PlaybackState,
@@ -48,6 +49,7 @@ const PlayerModalPage = () => {
 	const { position, duration, buffered } = useProgress();
 	const { playing, bufferingDuringPlay } = useIsPlaying();
 	const [repeatModeStatus, setRepeatModeStatus] = useState<RepeatMode>();
+	const { playlists } = usePlaylistStore();
 
 	// const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -210,7 +212,13 @@ const PlayerModalPage = () => {
 								</Text>
 							</View>
 							<IconButton
-								icon="plus"
+								icon={
+									playlists.some((playlist) =>
+										playlist.tracks.some((val) => val.url === activeTrack?.url),
+									)
+										? 'check-circle'
+										: 'plus'
+								}
 								onPress={() => playlistAddBtmSheetRef.current?.present()}
 							/>
 						</View>
