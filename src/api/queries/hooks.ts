@@ -17,7 +17,7 @@ import { Artist, SearchAnimeSort, SearchArtistsSort, SearchThemesSort } from './
 export const useDiscover = (enabled = true) =>
 	useQuery({
 		queryKey: ['discover'],
-		queryFn: () => fetchRandom(15),
+		queryFn: () => fetchRandom(30),
 		enabled: enabled,
 		refetchOnWindowFocus: false,
 	});

@@ -31,7 +31,7 @@ export const fetchRecentlyAdded = async (page_num: number = 1) => {
 		'fields[animetheme]': 'id,type,slug',
 		'fields[anime]': 'id,name,slug,media_format,season,year',
 		'page[number]': page_num,
-		'page[size]': 15,
+		'page[size]': 30,
 	};
 	const { data } = await ATClient.get<ExploreDataResponse>('/video', { params });
 	const tracks = exploreDataToTrack(data);
@@ -47,7 +47,7 @@ export const fetchMostViewed = async (page_num: number = 1) => {
 		'fields[animetheme]': 'id,type,slug',
 		'fields[anime]': 'id,name,slug,media_format,season,year',
 		'page[number]': page_num,
-		'page[size]': 15,
+		'page[size]': 30,
 	};
 	const { data } = await ATClient.get<ExploreDataResponse>('/video', { params });
 	const tracks = exploreDataToTrack(data);
