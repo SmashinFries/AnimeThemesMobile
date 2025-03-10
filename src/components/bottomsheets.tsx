@@ -121,7 +121,7 @@ export const PlayerBottomSheet = React.forwardRef<BottomSheetModalMethods, Playe
 // eslint-disable-next-line react/display-name
 export const SongBottomSheet = React.forwardRef<
 	BottomSheetModalMethods,
-	PlayerBottomSheetProps & { onPlaylistAdd: () => void }
+	PlayerBottomSheetProps & { onPlaylistAdd?: () => void }
 >(({ track, onPlaylistAdd }, ref) => {
 	const { colors } = useTheme();
 	const { dismiss } = useBottomSheetModal();
@@ -178,7 +178,7 @@ export const SongBottomSheet = React.forwardRef<
 						left={(props) => <List.Icon {...props} icon="plus" />}
 						onPress={() => {
 							dismiss();
-							onPlaylistAdd();
+							onPlaylistAdd?.();
 						}}
 					/>
 					<List.Item

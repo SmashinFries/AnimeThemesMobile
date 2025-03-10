@@ -158,7 +158,7 @@ const ArtistPage = ({ slug }: { slug: string | undefined }) => {
 								}}
 								style={{
 									borderRadius: 8,
-									aspectRatio: 1 / 1,
+									aspectRatio: 1,
 									width: undefined,
 									height: 60,
 								}}
@@ -208,7 +208,11 @@ const ArtistPage = ({ slug }: { slug: string | undefined }) => {
                 data={data?.artist.songs}
 
             /> */}
-			<SongBottomSheet ref={bottomSheetRef} track={selectedTrack} />
+			<SongBottomSheet
+				ref={bottomSheetRef}
+				track={selectedTrack}
+				onPlaylistAdd={() => null}
+			/>
 		</LoadingView>
 	);
 };

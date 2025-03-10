@@ -73,7 +73,7 @@ const AnimeHeading = ({ data }: AnimeHeaderProps) => {
 							<TitleDetail text={data.anime.media_format} icon="video-outline" />
 						</View>
 					</View>
-					{data.anime.synopsis && (
+					{!!data.anime.synopsis && (
 						<Text style={{ paddingVertical: 16 }}>
 							{data.anime.synopsis.replace(/<[^>]*>?/gm, '')}
 						</Text>

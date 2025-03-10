@@ -33,7 +33,7 @@ export const SongBoxCard = ({ track, videoBasename, onPress, onLongPress }: Song
 				<Image
 					source={{ uri: track.artwork }}
 					style={{
-						aspectRatio: 1 / 1,
+						aspectRatio: 1,
 						borderRadius: 8,
 						width: undefined,
 						height: 160,
@@ -260,7 +260,7 @@ export const SearchItem = ({
 					<Image
 						source={{ uri: imageUrl }}
 						style={{
-							aspectRatio: 1 / 1,
+							aspectRatio: 1,
 							width: undefined,
 							height: 80,
 							borderRadius: 12,

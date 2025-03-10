@@ -47,7 +47,7 @@ const CreatePlaylistPage = () => {
 					<Image
 						placeholder={{ blurhash: BLURHASH }}
 						source={{ uri: imgSrc }}
-						style={{ height: 200, aspectRatio: 1 / 1 }}
+						style={{ height: 200, aspectRatio: 1 }}
 					/>
 					{!imgSrc && (
 						<IconButton

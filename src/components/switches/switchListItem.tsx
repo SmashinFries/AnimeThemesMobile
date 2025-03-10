@@ -277,7 +277,7 @@ export const MaterialSwitchListItem = ({
 		}
 	};
 	const onSwitchPress = () => {
-		onPress != null ? onPress() : null;
+		onPress?.();
 	};
 	useEffect(() => {
 		if (active !== selected) {

@@ -233,7 +233,7 @@ export const MaterialSwitch = ({
 		}
 	};
 	const onSwitchPress = () => {
-		onPress != null ? onPress() : null;
+		onPress?.();
 	};
 	useEffect(() => {
 		if (active !== selected) {

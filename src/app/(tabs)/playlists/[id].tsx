@@ -45,7 +45,7 @@ const PlaylistHeading = ({ id }: { id: number }) => {
 								source={{ uri: playlists[id].coverImg }}
 								placeholder={{ blurhash: BLURHASH }}
 								style={{
-									aspectRatio: 1 / 1,
+									aspectRatio: 1,
 									width: undefined,
 									height: 160,
 									borderRadius: 6,
