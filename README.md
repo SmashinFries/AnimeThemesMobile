@@ -1,6 +1,8 @@
 # AniThemes 🎶
 An unoffical [AnimeThemes](https://animethemes.moe/) app.
 
+[**Download here!** (Android)](https://github.com/SmashinFries/AnimeThemesMobile/releases/download/1.0/atm-v1.apk)
+
 ## Platforms
 - [x] 🤖 Android
 - [ ] 🖥️ Desktop (Windows, Linux, MacOS)
